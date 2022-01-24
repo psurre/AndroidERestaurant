@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AndroidERestaurant</string>
+    <string name="project_name">DroidRestaurant</string>
+    <string name="project_welcome">Bienvenue</string>
+    <string name="project_chez">chez</string>
+    <string name="project_entry">Entrées</string>
+    <string name="project_main">Plats</string>
+    <string name="project_dessert">Desserts</string>
+</resources>
