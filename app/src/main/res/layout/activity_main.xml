@@ -21,74 +21,36 @@
         android:id="@+id/TxtRestaurant"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="4dp"
         android:fontFamily="casual"
         android:text="@string/project_name"
         android:textAlignment="gravity"
-        android:textColor="#455A64"
+        android:textColor="#DDEBF3"
         android:textSize="34sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <Button
-        android:id="@+id/BtnEntry"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="80dp"
-        android:background="@android:color/black"
-        android:onClick="gotoEntry"
-        android:text="@string/project_entry"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ImgRestaurant" />
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        tools:ignore="TextContrastCheck" />
 
     <View
         android:id="@+id/divider1"
         android:layout_width="350dp"
         android:layout_height="1dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="130dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BtnEntry" />
-
-    <Button
-        android:id="@+id/BtnMain"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="37dp"
-        android:background="@android:color/black"
-        android:onClick="gotoMain"
-        android:text="@string/project_main"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider1"
-        app:layout_constraintVertical_bias="0.175" />
-
-    <Button
-        android:id="@+id/BtnDesserts"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="32dp"
-        android:background="@android:color/black"
-        android:onClick="gotoDesserts"
-        android:text="@string/project_dessert"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/ImgRestaurant" />
 
     <View
         android:id="@+id/divider3"
         android:layout_width="350dp"
         android:layout_height="1dp"
-        android:layout_marginStart="36dp"
         android:layout_marginTop="116dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
@@ -96,9 +58,9 @@
         android:id="@+id/divider2"
         android:layout_width="350dp"
         android:layout_height="1dp"
-        android:layout_marginStart="36dp"
         android:layout_marginTop="124dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
@@ -106,10 +68,50 @@
         android:id="@+id/ImgRestaurant"
         android:layout_width="129dp"
         android:layout_height="129dp"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TxtRestaurant"
         app:srcCompat="@drawable/android_cooking" />
+
+    <TextView
+        android:id="@+id/txtStarter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:onClick="starterDetails"
+        android:text="@string/project_starter"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ImgRestaurant" />
+
+    <TextView
+        android:id="@+id/txtMainCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:onClick="mainCourseDetails"
+        android:text="@string/project_mainCourse"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+    <TextView
+        android:id="@+id/txtDessert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:onClick="dessertDetails"
+        android:text="@string/project_dessert"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
