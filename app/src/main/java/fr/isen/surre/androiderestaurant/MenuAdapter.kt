@@ -30,7 +30,5 @@ class MenuAdapter (private val menuReadings: ArrayList<String>, private val onIt
         init {
             menuTextView = view.findViewById(R.id.txtMenuItem)
         }
-
-
     }
 }
