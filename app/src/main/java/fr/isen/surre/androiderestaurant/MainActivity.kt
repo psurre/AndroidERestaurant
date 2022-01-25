@@ -19,8 +19,16 @@ class MainActivity : AppCompatActivity() {
         bindingMainAct = ActivityMainBinding.inflate(layoutInflater)
         val view = bindingMainAct.root
         setContentView(view)
+        bindingMainAct.txtStarter.setOnClickListener {
+            dishesDetails(bindingMainAct.txtStarter.text.toString())
+        }
+        bindingMainAct.txtMainCourse.setOnClickListener {
+            dishesDetails(bindingMainAct.txtMainCourse.text.toString())
+        }
+        bindingMainAct.txtDessert.setOnClickListener {
+            dishesDetails(bindingMainAct.txtDessert.text.toString())
+        }
 
-        bindingMainAct.txtStarter
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -28,21 +36,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dishesDetails( dishType : String) {
-        val txtClic = findViewById(R.id.txtStarter) as TextView
-        val msgTxt = txtClic.text.toString()
         val changePage = Intent(this, DetailActivity::class.java)
         changePage.putExtra(KEYDETAILTXT, dishType)
         startActivity(changePage)
-    }
-
-    fun starterDetails (view: View){
-        dishesDetails(getString(R.string.project_starter))
-    }
-
-    fun mainCourseDetails (view: View){
-        dishesDetails(getString(R.string.project_mainCourse))
-    }
-    fun dessertDetails (view: View){
-        dishesDetails(getString(R.string.project_dessert))
     }
 }

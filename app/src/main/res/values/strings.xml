@@ -6,4 +6,7 @@
     <string name="project_starter">Entrées</string>
     <string name="project_mainCourse">Plats</string>
     <string name="project_dessert">Desserts</string>
+    <string name="project_buy">Acheter</string>
+    <string name="project_price">Prix</string>
+    <string name="project_currency">€</string>
 </resources>
