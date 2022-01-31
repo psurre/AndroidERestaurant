@@ -4,7 +4,6 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -24,13 +23,18 @@ class CatCardHolder (private val menuReadings: ArrayList<String>, private val on
         for (data in dishes.data){
             for (dish in data.items){
                 if (dish.id == menuReadings[position]) {
+                    // Nom du plat
                     holder.dishTextView.text = dish.name_fr
-                    var condContinue: Boolean = true
-                    for (image in dish.images){
-                        if (Patterns.WEB_URL.matcher(image).matches() && condContinue) {
+                    loopImg@for (image in dish.images){
+                        if (Patterns.WEB_URL.matcher(image).matches()) {
+                            // Image du plat
                             picasso.load(image).into(holder.dishImgView)
-                            condContinue = false
+                            break@loopImg
                         }
+                    }
+                    loopPrice@for (price in dish.prices){
+                        // Prix du plat
+                        holder.dishTextViewPrice.text = price.price + "€"
                     }
                 }
             }
@@ -48,9 +52,11 @@ class CatCardHolder (private val menuReadings: ArrayList<String>, private val on
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         var dishTextView: TextView
         var dishImgView: ImageView
+        var dishTextViewPrice: TextView
         init {
             dishTextView = view.findViewById(R.id.txtDish)
             dishImgView = view.findViewById(R.id.imgDish)
+            dishTextViewPrice = view.findViewById(R.id.txtListPrice)
         }
     }
 

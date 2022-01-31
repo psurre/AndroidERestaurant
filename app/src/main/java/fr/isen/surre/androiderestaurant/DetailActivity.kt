@@ -15,7 +15,8 @@ import android.view.View
 
 
 // Constantes
-public const val KEYDISHTXT = "key.dish.txt"
+const val KEYDISHTXT = "key.dish.txt"
+const val KEYDISHDATAMAODEL = "key.dish.data.model"
 
 class DetailActivity : AppCompatActivity() {
     // Definition des variables
@@ -39,30 +40,9 @@ class DetailActivity : AppCompatActivity() {
         // Gestion du recycleView
         linearLayoutManager = LinearLayoutManager(this)
 
-        // Récupération des éléments via un webservice
-        val urlWebService = "http://test.api.catering.bluecodegames.com/menu"
-        val paramsWebService = HashMap<String, String>()
-        paramsWebService["id_shop"] = "1"
-        val jsonObject = JSONObject(paramsWebService as Map<*, *>?)
-        var dishModel: DataModel
-        val stringRequest = JsonObjectRequest(
-            Request.Method.POST, urlWebService, jsonObject,
-            { response ->
-                // Affichage de la ProgressBar
-                bindingDetAct.progressLoader.visibility = View.VISIBLE
-                // On met en pause 2s juste pour voir le loader tourner :)
-                Thread.sleep(2000L)
-                // Le résultat est parsé et envoyé dans la classe de DataModel
-                dishModel = Gson().fromJson(response.toString(), DataModel::class.java)
-                showDishes(message.toString(), dishModel)
-                // Cacher la ProgressBar
-                bindingDetAct.progressLoader.visibility = View.GONE
-            },{error->
-                bindingDetAct.TxtLog.text = error.message
-            }
-        )
-        VolleySingleton.getInstance(applicationContext)
-            .addToRequestQueue(stringRequest)
+        // Affichage des menus
+        getDataMenu (message.toString())
+
     }
 
     private fun onListItemClick(dish: String) {
@@ -80,6 +60,8 @@ class DetailActivity : AppCompatActivity() {
                 for (dish in category.items) {
                     dishesReturn.add(dish.id)
                 }
+            }else{
+                //TODO Faire le cas ou on ne trouve pas la catégorie
             }
         }
         //val adapter = MenuAdapter(dishesReturn, { position -> onListItemClick(position) })
@@ -87,5 +69,32 @@ class DetailActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         //recyclerView.adapter = adapter
         recyclerView.adapter = adapterCardHolder
+    }
+
+    private fun getDataMenu(message: String){
+        // Récupération des éléments via un webservice
+        val urlWebService = "http://test.api.catering.bluecodegames.com/menu"
+        val paramsWebService = HashMap<String, String>()
+        paramsWebService["id_shop"] = "1"
+        val jsonObject = JSONObject(paramsWebService as Map<*, *>?)
+        var dishModel: DataModel
+        val stringRequest = JsonObjectRequest(
+            Request.Method.POST, urlWebService, jsonObject,
+            { response ->
+                // Affichage de la ProgressBar
+                bindingDetAct.progressLoader.visibility = View.VISIBLE
+                // On met en pause 1s juste pour voir le loader tourner :)
+                Thread.sleep(1000L)
+                // Le résultat est parsé et envoyé dans la classe de DataModel
+                dishModel = Gson().fromJson(response.toString(), DataModel::class.java)
+                showDishes(message, dishModel)
+                // Cacher la ProgressBar
+                bindingDetAct.progressLoader.visibility = View.GONE
+            },{error->
+                bindingDetAct.TxtLog.text = error.message
+            }
+        )
+        VolleySingleton.getInstance(applicationContext)
+            .addToRequestQueue(stringRequest)
     }
 }
