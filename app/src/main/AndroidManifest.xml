@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".CategoryActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity" >
             <meta-data
@@ -29,7 +29,7 @@
         </activity>
         <activity
             android:name=".DishActivity"
-            android:parentActivityName=".DetailActivity"
+            android:parentActivityName=".CategoryActivity"
             android:exported="false" />
     </application>
 

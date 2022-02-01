@@ -1,74 +1,126 @@
 package fr.isen.surre.androiderestaurant
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
-import com.google.gson.Gson
 import fr.isen.surre.androiderestaurant.databinding.ActivityDishBinding
-import fr.isen.surre.androiderestaurant.model.DataModel
-import org.json.JSONObject
+import fr.isen.surre.androiderestaurant.model.DishModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.GsonBuilder
+import fr.isen.surre.androiderestaurant.model.DataBasket
+import java.io.File
 
+// Déclaration des Constantes
+const val MAXQTY = 50 // Nombre d'articles maximum dans le panier
+const val MINQTY = 1 // Nombre minimum à afficher dans la page de commande d'un plat
 
 class DishActivity : AppCompatActivity() {
     private lateinit var bindingDishAct : ActivityDishBinding
+    private var basket: MutableList<DataBasket> = mutableListOf()
+    var listImages: MutableList<String> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingDishAct = ActivityDishBinding.inflate(layoutInflater)
         val view = bindingDishAct.root
         setContentView(view)
-        // Dish contient l'identifiant du plat
-        val dish = intent.getStringExtra(KEYDISHTXT)
-        getDataMenu(dish.toString())
+        // Dish contient le DishModel
+        val dish = intent.getSerializableExtra (KEYDISHES) as DishModel
+        initDishActivity(dish)
+
+        bindingDishAct.imgbtnPlus.setOnClickListener {
+            addQuantity()
+            updatePrice(dish.prices[0].price.toInt(), bindingDishAct.etnQuantity.text.toString().toInt())
+        }
+
+        bindingDishAct.imgbtnMinus.setOnClickListener {
+            subQuantity()
+            updatePrice(dish.prices[0].price.toInt(), bindingDishAct.etnQuantity.text.toString().toInt())
+        }
+
+        bindingDishAct.btnCart.setOnClickListener {
+            var basketItem: DataBasket = DataBasket()
+            basketItem.dish = dish
+            basketItem.quantity = bindingDishAct.etnQuantity.text.toString().toInt()
+            basket.add(basketItem)
+            saveBasketJSON(view, basket)
+            saveUserPrefs (bindingDishAct.etnQuantity.text.toString().toInt())
+        }
     }
-    private fun getDataMenu(idDish: String){
-        // Récupération des éléments via un webservice
-        val urlWebService = "http://test.api.catering.bluecodegames.com/menu"
-        val jsonObject = JSONObject()
-        jsonObject.put("id_shop", "1")
-        var dishDetail: DataModel
-        val stringRequest = JsonObjectRequest(
-            Request.Method.POST, urlWebService, jsonObject,
-            { response ->
-                // Affichage de la ProgressBar
-                bindingDishAct.pgbDish.visibility = View.VISIBLE
-                // On met en pause 1s juste pour voir le loader tourner :)
-                Thread.sleep(1000L)
-                // Le résultat est parsé et envoyé dans la classe de DataModel
-                dishDetail = Gson().fromJson(response.toString(), DataModel::class.java)
-                showDishDetail (idDish, dishDetail)
-                // Cacher la ProgressBar
-                bindingDishAct.pgbDish.visibility = View.GONE
-            },{error->
-                Log.e("Recuperation du plat", "Le détail du plat n'a pas pu être récupéré")
-            }
-        )
-        VolleySingleton.getInstance(applicationContext)
-            .addToRequestQueue(stringRequest)
+    private fun initDishActivity(dish: DishModel){
+        bindingDishAct.etnQuantity.setText("1")
+        // On a trouvé notre plat
+        bindingDishAct.txtPrice.text = dish.prices[0].price ?: ""
+        bindingDishAct.txtDishName.text = dish.name_fr ?: ""
+        //Ingredients
+        bindingDishAct.txtIngredients.text = dish.ingredients.joinToString (", "){ it.name_fr }
+        // Création d'une liste avec les images
+        for (image in dish.images) {
+            listImages.add(image)
+        }
+        // TODO A modifier pour utiliser le nouveau caroussel
+        bindingDishAct.viewPager.adapter = DishDetailAdapter(supportFragmentManager, listImages)
     }
-    private fun showDishDetail (idDish: String, dishDetail: DataModel){
-        loopCat@for (cat in dishDetail.data){
-            for (dish in cat.items){
-                if (dish.id == idDish){
-                    // On a trouvé notre plat
-                    bindingDishAct.txtPrice.text = dish.prices[0]?.price
-                    bindingDishAct.txtDishName.text = dish.name_fr
-                    //Ingredients
-                    for (ingredient in dish.ingredients){
-                        val previousText = bindingDishAct.txtIngredients.text
-                        if (previousText.isNotEmpty()) {
-                            bindingDishAct.txtIngredients.text =
-                                previousText.toString()+", "+ingredient.name_fr
-                        }else{
-                            bindingDishAct.txtIngredients.text = ingredient.name_fr
-                        }
-                    }
-                    break@loopCat
-                }
+
+    private fun addQuantity (){
+        // Augmenter la quantité
+        var previousQty: Int = bindingDishAct.etnQuantity.text.toString().toInt()
+        if (previousQty < MAXQTY){
+            previousQty++
+        }
+        bindingDishAct.etnQuantity.setText(previousQty.toString())
+    }
+    private fun subQuantity (){
+        // Soustraire la quantité
+        var previousQty: Int = bindingDishAct.etnQuantity.text.toString().toInt()
+        if (previousQty > MINQTY){
+            previousQty--
+        }
+        bindingDishAct.etnQuantity.setText(previousQty.toString())
+    }
+    private fun updatePrice (basePrice: Int, quantity: Int){
+        var newPrice: Int
+        newPrice = quantity * basePrice
+        bindingDishAct.txtPrice.setText(newPrice.toString())
+    }
+    private fun saveBasketJSON(view: View, basket: List<DataBasket>){
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+        val jsonBasket: String = gsonPretty.toJson(basket)
+        File(codeCacheDir, "basket.json").writeText(jsonBasket)
+        showSnackbarBasketFile (view)
+    }
+
+    private fun saveUserPrefs (basketItems: Int){
+        val UserPrefs =  getSharedPreferences("ERESTOPARAMS",Context.MODE_PRIVATE)
+        var editor = UserPrefs.edit()
+        var actualBasket: Int = 0
+        actualBasket = UserPrefs.getInt("basketquantity", actualBasket)
+        editor.putInt("basketquantity", actualBasket + basketItems)
+        editor.commit()
+        actualBasket = UserPrefs.getInt("basketquantity", actualBasket)
+        basketInfo(actualBasket)
+    }
+    private fun showSnackbarBasketFile(view: View) {
+        val snackbar = Snackbar
+            .make(view, "Votre commande est bien enregistrée !", Snackbar.LENGTH_LONG)
+        // Show
+        snackbar.show()
+    }
+    private fun basketInfo (basketItems: Int){
+        // Récupération des infos sur le nombre d'articles dans le panier
+        if (basketItems > 0){
+            bindingDishAct.btnInfoBasket.visibility = View.VISIBLE
+            bindingDishAct.btnInfoBasket.text = basketItems.toString()
+            if (basketItems > 10){
+                bindingDishAct.btnInfoBasket.textSize = "7".toFloat()
+            }else {
+                bindingDishAct.btnInfoBasket.textSize = "12".toFloat()
             }
+        }else{
+            bindingDishAct.btnInfoBasket.visibility = View.GONE
+            bindingDishAct.btnInfoBasket.text = "0"
+            bindingDishAct.btnInfoBasket.textSize = "12".toFloat()
         }
     }
 }

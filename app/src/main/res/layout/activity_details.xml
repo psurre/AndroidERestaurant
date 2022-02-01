@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="84dp"
         android:background="?android:attr/listDivider"
@@ -62,9 +62,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvMenu"
-        android:layout_width="346dp"
-        android:layout_height="468dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="36dp"
         android:scrollbars="vertical"
+        android:verticalScrollbarPosition="right"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
