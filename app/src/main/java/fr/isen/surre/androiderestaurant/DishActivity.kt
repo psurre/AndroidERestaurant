@@ -1,23 +1,27 @@
 package fr.isen.surre.androiderestaurant
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.View
 import fr.isen.surre.androiderestaurant.databinding.ActivityDishBinding
 import fr.isen.surre.androiderestaurant.model.DishModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import fr.isen.surre.androiderestaurant.model.DataBasket
+import fr.isen.surre.androiderestaurant.model.DataBasketItem
 import java.io.File
 
 // Déclaration des Constantes
 const val MAXQTY = 50 // Nombre d'articles maximum dans le panier
 const val MINQTY = 1 // Nombre minimum à afficher dans la page de commande d'un plat
+const val BASKET = "basket.activity"
 
 class DishActivity : AppCompatActivity() {
     private lateinit var bindingDishAct : ActivityDishBinding
-    private var basket: MutableList<DataBasket> = mutableListOf()
+    private var basket: DataBasket = DataBasket()
     var listImages: MutableList<String> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +44,21 @@ class DishActivity : AppCompatActivity() {
         }
 
         bindingDishAct.btnCart.setOnClickListener {
-            var basketItem: DataBasket = DataBasket()
+            var basketItem: DataBasketItem = DataBasketItem()
             basketItem.dish = dish
             basketItem.quantity = bindingDishAct.etnQuantity.text.toString().toInt()
-            basket.add(basketItem)
+            basket = loadBasketJSON(this)
+            basket.data.add(basketItem)
             saveBasketJSON(view, basket)
             saveUserPrefs (bindingDishAct.etnQuantity.text.toString().toInt())
+        }
+        bindingDishAct.imgCart.setOnClickListener {
+            // Ouvrir la page du panier
+            val changePage = Intent(this, BasketActivity::class.java)
+            // TODO Faire un reload depuis le fichier JSON pour recharger le panier
+            var basketJSON = loadBasketJSON(this)
+            changePage.putExtra(BASKET, basketJSON)
+            startActivity(changePage)
         }
     }
     private fun initDishActivity(dish: DishModel){
@@ -84,13 +97,22 @@ class DishActivity : AppCompatActivity() {
         newPrice = quantity * basePrice
         bindingDishAct.txtPrice.setText(newPrice.toString())
     }
-    private fun saveBasketJSON(view: View, basket: List<DataBasket>){
+    private fun saveBasketJSON(view: View, basket: DataBasket){
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
         val jsonBasket: String = gsonPretty.toJson(basket)
         File(codeCacheDir, "basket.json").writeText(jsonBasket)
         showSnackbarBasketFile (view)
     }
-
+    private fun loadBasketJSON(context: Context): DataBasket{
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+        var basket: DataBasket = DataBasket()
+        lateinit var jsonString: String
+        if (File (codeCacheDir, "basket.json").exists()){
+            jsonString = File(codeCacheDir,"basket.json").readText()
+            basket = gsonPretty.fromJson(jsonString, DataBasket::class.java)
+        }
+        return basket
+    }
     private fun saveUserPrefs (basketItems: Int){
         val UserPrefs =  getSharedPreferences("ERESTOPARAMS",Context.MODE_PRIVATE)
         var editor = UserPrefs.edit()

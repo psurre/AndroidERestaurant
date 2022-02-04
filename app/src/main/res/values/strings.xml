@@ -12,4 +12,28 @@
     <string name="project_info" />
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="project_pay">Payer</string>
+    <string name="project_dish_default_name">Plat par défaut</string>
+    <string name="project_basket_total">Total : </string>
+    <string name="project_basket_qty">Quantité : </string>
+    <string name="project_dish_default_image">DishImage</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="project_login">"Compte : "</string>
+    <string name="project_mdp">"Mot de passe : "</string>
+    <string name="project_connect">Connexion</string>
+    <string name="project_nom">Nom</string>
+    <string name="project_surname">Prénom</string>
+    <string name="project_address">Adresse</string>
+    <string name="project_email">Email</string>
+    <string name="project_regpass">Mot de passe</string>
+    <string name="project_register">S\'enregistrer</string>
+    <string name="project_txtregister">Créez votre compte</string>
 </resources>

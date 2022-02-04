@@ -8,15 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import fr.isen.surre.androiderestaurant.model.DataModel
 import fr.isen.surre.androiderestaurant.model.DishModel
 
-class CatCardHolder (private val dishes: ArrayList<DishModel>, private val onItemClicked: (DishModel) -> Unit) : RecyclerView.Adapter<CatCardHolder.ViewHolder>(){
+class CategoryAdapter (private val dishes: ArrayList<DishModel>, private val onItemClicked: (DishModel) -> Unit) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatCardHolder.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_cat_dishes, parent, false)
-        return CatCardHolder.ViewHolder(view)
+        return CategoryAdapter.ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

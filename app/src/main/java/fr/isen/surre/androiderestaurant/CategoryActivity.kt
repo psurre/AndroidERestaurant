@@ -65,7 +65,7 @@ class CategoryActivity : AppCompatActivity() {
                 //TODO Faire le cas ou on ne trouve pas la catégorie
             }
         }
-        val adapterCardHolder = CatCardHolder (dishesReturn, { position -> onListItemClick(position) })
+        val adapterCardHolder = CategoryAdapter (dishesReturn, { position -> onListItemClick(position) })
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapterCardHolder
     }
