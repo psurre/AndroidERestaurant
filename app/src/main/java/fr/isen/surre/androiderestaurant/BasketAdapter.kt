@@ -1,10 +1,12 @@
 package fr.isen.surre.androiderestaurant
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import fr.isen.surre.androiderestaurant.model.DataBasket
@@ -43,7 +45,10 @@ class BasketAdapter(private val basket: DataBasket, private val onItemClicked: (
                     holder.dishQty.text = basketItem.quantity.toString()
                     floatTotal = basketItem.quantity.toString().toFloat() * basketItem.dish.prices[0].price.toString().toFloat()
                     holder.dishTotal.text = floatTotal.toString()
-                    picasso.load(basketItem.dish.images[0]).into(holder.dishImage)
+                    val firstImage = basketItem.dish.getFirstPicture(basketItem.dish)
+                    if (firstImage != ""){
+                        picasso.load(basketItem.dish.images[0]).into(holder.dishImage)
+                    }
                 }
         }
         holder.dishTrash.setOnClickListener {

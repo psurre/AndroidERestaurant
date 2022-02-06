@@ -34,7 +34,17 @@ data class DishModel(
     val images: List<String> = listOf(),
     val ingredients: List<DishIngredients> = listOf(),
     val prices: List<DishPrices> = listOf()
-): Serializable
+): Serializable {
+    fun getFirstPicture (dish: DishModel): String{
+        var firstImage: String
+        if (dish.images.isEmpty()){
+            firstImage=""
+        }else{
+            firstImage=dish.images[0]
+        }
+        return firstImage
+    }
+}
 
 data class  DishCategoryModel(
     val name_fr: String = "",

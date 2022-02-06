@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itemLogin"
+        android:title="Login"
+        android:icon="@android:drawable/ic_lock_idle_lock"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/itemBasket"
+        android:title="Basket"
+        android:icon="@drawable/basket"
+        app:showAsAction="always"/>
+</menu>

@@ -3,13 +3,11 @@ package fr.isen.surre.androiderestaurant
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.isen.surre.androiderestaurant.databinding.ActivityBasketBinding
 import fr.isen.surre.androiderestaurant.model.DataBasket
 import fr.isen.surre.androiderestaurant.model.DataBasketItem
-import fr.isen.surre.androiderestaurant.model.DishModel
 
 class BasketActivity : AppCompatActivity() {
     // Définition des variables
@@ -35,18 +33,26 @@ class BasketActivity : AppCompatActivity() {
         basketInit()
 
         bindingBasketActivity.btnPay.setOnClickListener {
-            val changePage = Intent(this, AccountActivity::class.java)
-            startActivity(changePage)
+            if (checkConn(this)){
+                // L'utilisateur est connecté -> on peut passer la commande
+                // TODO implémenter le passage de commande
+            }else{
+                val changePage = Intent(this, AccountActivity::class.java)
+                startActivity(changePage)
+            }
         }
-
     }
 
     private fun onListItemClick(basketItem: DataBasketItem) {
         // Fonction de gestion du clic dans la recycleview
-        // TODO Toast pour vérifier le bon fonctionnement
-        val duration = Toast.LENGTH_SHORT
-        val toast = Toast.makeText(this, "Article "+ basketItem.dish.name_fr.toString()+" supprimé du panier", duration)
-        toast.show()
+        // Retrait du plat du panier
+        basket.data.remove(basketItem)
+        // Mise à jour du fichier de sauvegarde JSON
+        deleteDishInBasket(basketItem)
+        //Rechargement de la page
+        basketInit()
+        val message: String = "Article "+ basketItem.dish.name_fr.toString()+" supprimé du panier"
+        showSnackbar(message, bindingBasketActivity.root)
     }
 
     private fun basketInit(){
@@ -58,4 +64,10 @@ class BasketActivity : AppCompatActivity() {
         recyclerView.adapter = basketAdapter
     }
 
+    private fun deleteDishInBasket (basketItem: DataBasketItem){
+        var basket: DataBasket = loadBasketJSON(this)
+        basket.data.remove(basketItem)
+        saveBasketJSON(bindingBasketActivity.root,basket, this)
+        saveUserPrefs(this, -basketItem.quantity)
+    }
 }

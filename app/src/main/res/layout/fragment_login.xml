@@ -21,7 +21,8 @@
             android:id="@+id/edtLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="textEnd" />
+            android:textAlignment="textStart"
+            android:inputType="textEmailAddress"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -38,7 +39,8 @@
             android:id="@+id/edtMdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="textEnd" />
+            android:textAlignment="textStart"
+            android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtMdp" />
 
     <Button
-        android:id="@+id/containedButton"
+        android:id="@+id/btnConn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

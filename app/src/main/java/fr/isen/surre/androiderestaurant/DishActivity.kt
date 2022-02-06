@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.View
 import fr.isen.surre.androiderestaurant.databinding.ActivityDishBinding
 import fr.isen.surre.androiderestaurant.model.DishModel
@@ -35,12 +34,12 @@ class DishActivity : AppCompatActivity() {
 
         bindingDishAct.imgbtnPlus.setOnClickListener {
             addQuantity()
-            updatePrice(dish.prices[0].price.toInt(), bindingDishAct.etnQuantity.text.toString().toInt())
+            updatePrice(dish.prices[0].price.toFloat(), bindingDishAct.etnQuantity.text.toString().toInt())
         }
 
         bindingDishAct.imgbtnMinus.setOnClickListener {
             subQuantity()
-            updatePrice(dish.prices[0].price.toInt(), bindingDishAct.etnQuantity.text.toString().toInt())
+            updatePrice(dish.prices[0].price.toFloat(), bindingDishAct.etnQuantity.text.toString().toInt())
         }
 
         bindingDishAct.btnCart.setOnClickListener {
@@ -49,13 +48,12 @@ class DishActivity : AppCompatActivity() {
             basketItem.quantity = bindingDishAct.etnQuantity.text.toString().toInt()
             basket = loadBasketJSON(this)
             basket.data.add(basketItem)
-            saveBasketJSON(view, basket)
-            saveUserPrefs (bindingDishAct.etnQuantity.text.toString().toInt())
+            saveBasketJSON(view, basket, this)
+            basketInfo(saveUserPrefs (this, bindingDishAct.etnQuantity.text.toString().toInt()))
         }
         bindingDishAct.imgCart.setOnClickListener {
             // Ouvrir la page du panier
             val changePage = Intent(this, BasketActivity::class.java)
-            // TODO Faire un reload depuis le fichier JSON pour recharger le panier
             var basketJSON = loadBasketJSON(this)
             changePage.putExtra(BASKET, basketJSON)
             startActivity(changePage)
@@ -72,8 +70,12 @@ class DishActivity : AppCompatActivity() {
         for (image in dish.images) {
             listImages.add(image)
         }
+        if (listImages.isEmpty()){
+            listImages.add("")
+        }
         // TODO A modifier pour utiliser le nouveau caroussel
         bindingDishAct.viewPager.adapter = DishDetailAdapter(supportFragmentManager, listImages)
+        //bindingDishAct.viewPager.adapter = DishPictureAdapter(activity as DishActivity(), listImages)
     }
 
     private fun addQuantity (){
@@ -92,42 +94,10 @@ class DishActivity : AppCompatActivity() {
         }
         bindingDishAct.etnQuantity.setText(previousQty.toString())
     }
-    private fun updatePrice (basePrice: Int, quantity: Int){
-        var newPrice: Int
+    private fun updatePrice (basePrice: Float, quantity: Int){
+        var newPrice: Float
         newPrice = quantity * basePrice
         bindingDishAct.txtPrice.setText(newPrice.toString())
-    }
-    private fun saveBasketJSON(view: View, basket: DataBasket){
-        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-        val jsonBasket: String = gsonPretty.toJson(basket)
-        File(codeCacheDir, "basket.json").writeText(jsonBasket)
-        showSnackbarBasketFile (view)
-    }
-    private fun loadBasketJSON(context: Context): DataBasket{
-        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-        var basket: DataBasket = DataBasket()
-        lateinit var jsonString: String
-        if (File (codeCacheDir, "basket.json").exists()){
-            jsonString = File(codeCacheDir,"basket.json").readText()
-            basket = gsonPretty.fromJson(jsonString, DataBasket::class.java)
-        }
-        return basket
-    }
-    private fun saveUserPrefs (basketItems: Int){
-        val UserPrefs =  getSharedPreferences("ERESTOPARAMS",Context.MODE_PRIVATE)
-        var editor = UserPrefs.edit()
-        var actualBasket: Int = 0
-        actualBasket = UserPrefs.getInt("basketquantity", actualBasket)
-        editor.putInt("basketquantity", actualBasket + basketItems)
-        editor.commit()
-        actualBasket = UserPrefs.getInt("basketquantity", actualBasket)
-        basketInfo(actualBasket)
-    }
-    private fun showSnackbarBasketFile(view: View) {
-        val snackbar = Snackbar
-            .make(view, "Votre commande est bien enregistrée !", Snackbar.LENGTH_LONG)
-        // Show
-        snackbar.show()
     }
     private fun basketInfo (basketItems: Int){
         // Récupération des infos sur le nombre d'articles dans le panier
