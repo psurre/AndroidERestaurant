@@ -22,12 +22,6 @@ class AccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_account)
         fragmentTransaction.replace(R.id.frameLogin, loginFragment).commit()
     }
-    fun savePrefsIdUser (idUser: String){
-        val UserPrefs =  getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
-        var editor = UserPrefs.edit()
-        editor.putString("user_id", idUser)
-        editor.commit()
-    }
 
     fun gotoRegister (){
         val fragmentRegisterTransaction : FragmentTransaction = fragmentManager.beginTransaction()

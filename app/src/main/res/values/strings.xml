@@ -1,17 +1,15 @@
 <resources>
-    <string name="app_name">AndroidERestaurant</string>
+    <string name="app_name">Pinguis, id est vita</string>
     <string name="project_name">DroidRestaurant</string>
     <string name="project_welcome">Bienvenue</string>
     <string name="project_chez">chez</string>
     <string name="project_starter">Entrées</string>
     <string name="project_mainCourse">Plats</string>
     <string name="project_dessert">Desserts</string>
-    <string name="project_buy">Acheter</string>
+    <string name="project_buy">Ajouter au panier</string>
     <string name="project_price">Prix</string>
     <string name="project_currency">€</string>
     <string name="project_info" />
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="project_pay">Payer</string>
     <string name="project_dish_default_name">Plat par défaut</string>
     <string name="project_basket_total">Total : </string>
@@ -36,4 +34,11 @@
     <string name="project_regpass">Mot de passe</string>
     <string name="project_register">S\'enregistrer</string>
     <string name="project_txtregister">Créez votre compte</string>
+    <string name="project_home">Retourner à l\'accueil</string>
+    <string name="project_orderTreatment">Commande en cours de traitement ...</string>
+    <string name="project_orderFinish">Commande traitée !</string>
+    <string name="project_about">A propos de cette application</string>
+    <string name="project_author">Développeur : Patrick Surre</string>
+    <string name="project_idea">Idée originale : Marc Mollinari</string>
+    <string name="project_design">Design : Patrick Surre</string>
 </resources>

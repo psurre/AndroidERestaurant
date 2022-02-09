@@ -1,13 +1,12 @@
 package fr.isen.surre.androiderestaurant
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class DishDetailAdapter(fm:FragmentManager, private val dishImages: MutableList<String>) : FragmentStatePagerAdapter(fm) {
-    override fun getCount(): Int {
+class DishDetailAdapter (activity: AppCompatActivity, private val dishImages: List<String>) : FragmentStateAdapter (activity) {
+    override fun getItemCount(): Int {
         return dishImages.size;
     }
-
-    override fun getItem(position: Int): Fragment = DishFragment(dishImages[position])
+    override fun createFragment(position: Int): Fragment = DishFragment.newInstance (dishImages[position])
 }

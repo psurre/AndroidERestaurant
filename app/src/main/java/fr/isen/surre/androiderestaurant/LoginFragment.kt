@@ -35,6 +35,10 @@ class LoginFragment : Fragment() {
         bindingLoginFragment.btnConn.setOnClickListener {
             connectUser(view)
         }
+        // Action OnClick sur bouton Close
+        bindingLoginFragment.imgCloseLogin.setOnClickListener {
+            (activity as AccountActivity).onBackPressed()
+        }
     }
 
     private fun connectUser (view: View){
@@ -50,37 +54,19 @@ class LoginFragment : Fragment() {
             { response ->
                 userData = Gson().fromJson(response.toString(), DataRegister::class.java)
                 if (userData.code == "200"){
-                    showSnackbar(view, "Connecté avec l'id : "+userData.data.id+" !")
-                    (activity as AccountActivity).savePrefsIdUser(userData.data.id)
+                    showSnackbar("Connecté avec l'id : "+userData.data.id+" !", view)
+                    context?.let { savePrefsIdUser (it, userData.data.id) }
                     // Retour vers la page ayant appelé la page de login
                     (activity as AccountActivity).onBackPressed()
                 }else{
-                    showSnackbar(view, "Erreur : " + userData.code)
+                    showSnackbar("Erreur : " + userData.code, view)
                 }
             },{ error ->
                 // Gérer l'erreur
-                showSnackbar(view, "Serveur indisponible : réessayez plus tard")
+                showSnackbar("Serveur indisponible : réessayez plus tard", view)
             }
         )
         VolleySingleton.getInstance((activity as AccountActivity).applicationContext)
             .addToRequestQueue(stringRequest)
     }
-    private fun showSnackbar(view: View, message: String){
-        val snackbar = Snackbar
-            .make(view, message, Snackbar.LENGTH_LONG)
-        // Show
-        snackbar.show()
-    }
-    companion object{
-        // companion object = Permet de référencer une fonction statique (sans instancier la classe à laquelle elle appartient)
-        // TODO A corriger, pris en exemple
-        @JvmStatic
-        fun newInstance(pictureURL: String) =
-            DishPictureFragment().apply {
-                arguments = Bundle().apply {
-                    putString("picture_url", pictureURL)
-                }
-            }
-    }
-
 }

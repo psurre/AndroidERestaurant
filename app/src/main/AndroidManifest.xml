@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidERestaurant">
         <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProcessOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".AccountActivity"
             android:exported="false" />
         <activity

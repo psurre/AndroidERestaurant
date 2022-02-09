@@ -9,7 +9,9 @@ import fr.isen.surre.androiderestaurant.databinding.ActivityBasketBinding
 import fr.isen.surre.androiderestaurant.model.DataBasket
 import fr.isen.surre.androiderestaurant.model.DataBasketItem
 
-class BasketActivity : AppCompatActivity() {
+const val BASKETKEY="basket"
+
+class BasketActivity : OptionsMenuActivity() {
     // Définition des variables
     private lateinit var bindingBasketActivity : ActivityBasketBinding
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -35,7 +37,9 @@ class BasketActivity : AppCompatActivity() {
         bindingBasketActivity.btnPay.setOnClickListener {
             if (checkConn(this)){
                 // L'utilisateur est connecté -> on peut passer la commande
-                // TODO implémenter le passage de commande
+                val changePage = Intent (this, ProcessOrderActivity::class.java)
+                changePage.putExtra(BASKETKEY, basket)
+                startActivity(changePage)
             }else{
                 val changePage = Intent(this, AccountActivity::class.java)
                 startActivity(changePage)
@@ -45,13 +49,12 @@ class BasketActivity : AppCompatActivity() {
 
     private fun onListItemClick(basketItem: DataBasketItem) {
         // Fonction de gestion du clic dans la recycleview
-        // Retrait du plat du panier
-        basket.data.remove(basketItem)
         // Mise à jour du fichier de sauvegarde JSON
         deleteDishInBasket(basketItem)
         //Rechargement de la page
         basketInit()
         val message: String = "Article "+ basketItem.dish.name_fr.toString()+" supprimé du panier"
+        invalidateOptionsMenu()
         showSnackbar(message, bindingBasketActivity.root)
     }
 
@@ -62,12 +65,16 @@ class BasketActivity : AppCompatActivity() {
         val basketAdapter = BasketAdapter(basket, { position -> onListItemClick(position) })
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = basketAdapter
+        if (getBasketQty(this).toInt() == 0){
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     private fun deleteDishInBasket (basketItem: DataBasketItem){
-        var basket: DataBasket = loadBasketJSON(this)
+        var basketJSON: DataBasket = loadBasketJSON(this)
+        basketJSON.data.remove(basketItem)
+        savePrefsQty(this, basket.getCountItemsInBasket()-basketItem.quantity)
         basket.data.remove(basketItem)
-        saveBasketJSON(bindingBasketActivity.root,basket, this)
-        saveUserPrefs(this, -basketItem.quantity)
+        saveBasketJSON(bindingBasketActivity.root, basketJSON, this)
     }
 }

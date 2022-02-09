@@ -26,15 +26,19 @@ fun loadBasketJSON(context: Context): DataBasket{
     return basket
 }
 
-fun saveUserPrefs (context: Context, basketItems: Int): Int{
+fun savePrefsIdUser (context: Context, idUser: String){
     val UserPrefs =  context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
     var editor = UserPrefs.edit()
-    var actualBasket: Int = 0
-    actualBasket = UserPrefs.getInt("basketquantity", actualBasket)
-    editor.putInt("basketquantity", actualBasket + basketItems)
+    editor.putString("user_id", idUser)
     editor.commit()
-    actualBasket = UserPrefs.getInt("basketquantity", actualBasket)
-    return actualBasket
+}
+
+fun savePrefsQty (context: Context, basketItems: Int): Int{
+    val UserPrefs =  context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
+    var editor = UserPrefs.edit()
+    editor.putInt("basketquantity", basketItems)
+    editor.commit()
+    return UserPrefs.getInt("basketquantity", basketItems)
 }
 
 fun showToast(message: String, context: Context) {
@@ -54,7 +58,7 @@ fun checkConn(context: Context): Boolean{
     // Controle des parametres utilisateurs si on a un user_id
     val UserPrefs =  context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
     var user_id: String = ""
-    UserPrefs.getString("user_id", user_id)
+    user_id = UserPrefs.getString("user_id", user_id).toString()
     if (user_id.isEmpty()){
         // L'utilisateur n'est pas connecté
         stateEnd = false
@@ -71,4 +75,36 @@ fun getUserBasket(context: Context): DataBasket{
         basket = gsonPretty.fromJson(jsonString, DataBasket::class.java)
     }
     return basket
+}
+
+fun getUserId(context: Context): String{
+    var userId: String = ""
+    val UserPrefs =  context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
+    userId = UserPrefs.getString("user_id", userId).toString()
+    return userId
+}
+
+fun getBasketQty(context: Context): String{
+    var basketQty = ""
+    val UserPrefs =  context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
+    basketQty = UserPrefs.getInt("basketquantity", 0).toString()
+    return basketQty
+}
+
+fun deleteBasketPersistent(context: Context){
+    if (File (context.codeCacheDir, "basket.json").exists()){
+        File(context.codeCacheDir, "basket.json").delete()
+    }
+    savePrefsQty(context, 0)
+}
+
+fun initBasket(context: Context){
+    var itemInBasket = 0
+    if (File (context.codeCacheDir, "basket.json").exists()){
+        val basket = loadBasketJSON(context)
+        for (item in basket.data){
+            itemInBasket+=item.quantity
+        }
+    }
+    savePrefsQty(context, itemInBasket)
 }

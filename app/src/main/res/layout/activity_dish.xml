@@ -7,35 +7,33 @@
     android:visibility="visible"
     tools:context=".DishActivity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/dishPicturesPager"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
-        app:layout_constraintBottom_toTopOf="@+id/txtIngredients"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dvdOne" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imgCart"
         android:layout_width="45dp"
         android:layout_height="44dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/project_name"
-        app:layout_constraintBottom_toTopOf="@+id/dvdOne"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.421"
+        app:layout_constraintTop_toBottomOf="@+id/txtIngredients"
         app:srcCompat="@drawable/basket" />
 
     <Button
         android:id="@+id/btnInfoBasket"
         android:layout_width="41dp"
         android:layout_height="41dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="38dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="35dp"
         android:background="@drawable/rounded_corner"
         android:text="0"
         android:textColor="@color/white"
@@ -43,35 +41,25 @@
         android:textStyle="bold|italic"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtIngredients" />
 
     <TextView
         android:id="@+id/txtDishName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="casual"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/imgCart"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/dvdOne"
-        android:layout_width="409dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="27dp"
-        android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDishName" />
+        app:layout_constraintTop_toBottomOf="@+id/dishPicturesPager" />
 
     <View
         android:id="@+id/dvdTwo"
         android:layout_width="409dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="116dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,18 +70,18 @@
         android:id="@+id/btnCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/project_buy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dvdTwo" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnCart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dvdTwo" />
@@ -105,7 +93,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/project_currency"
         android:textSize="28sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnCart"
         app:layout_constraintStart_toEndOf="@+id/txtPrice"
         app:layout_constraintTop_toBottomOf="@+id/dvdTwo" />
 
@@ -113,12 +101,10 @@
         android:id="@+id/txtIngredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="392dp"
-        app:layout_constraintBottom_toTopOf="@+id/dvdTwo"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDishName" />
 
     <EditText
         android:id="@+id/etnQuantity"

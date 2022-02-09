@@ -1,27 +1,22 @@
 package fr.isen.surre.androiderestaurant
 
-import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import fr.isen.surre.androiderestaurant.databinding.ActivityDishBinding
 import fr.isen.surre.androiderestaurant.model.DishModel
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.GsonBuilder
 import fr.isen.surre.androiderestaurant.model.DataBasket
 import fr.isen.surre.androiderestaurant.model.DataBasketItem
-import java.io.File
 
 // Déclaration des Constantes
 const val MAXQTY = 50 // Nombre d'articles maximum dans le panier
 const val MINQTY = 1 // Nombre minimum à afficher dans la page de commande d'un plat
 const val BASKET = "basket.activity"
 
-class DishActivity : AppCompatActivity() {
+class DishActivity : OptionsMenuActivity() {
     private lateinit var bindingDishAct : ActivityDishBinding
     private var basket: DataBasket = DataBasket()
     var listImages: MutableList<String> = arrayListOf()
+    var basketItemQty: Int = 0
+    private lateinit var dish: DishModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +24,7 @@ class DishActivity : AppCompatActivity() {
         val view = bindingDishAct.root
         setContentView(view)
         // Dish contient le DishModel
-        val dish = intent.getSerializableExtra (KEYDISHES) as DishModel
+        dish = intent.getSerializableExtra (KEYDISHES) as DishModel
         initDishActivity(dish)
 
         bindingDishAct.imgbtnPlus.setOnClickListener {
@@ -46,18 +41,27 @@ class DishActivity : AppCompatActivity() {
             var basketItem: DataBasketItem = DataBasketItem()
             basketItem.dish = dish
             basketItem.quantity = bindingDishAct.etnQuantity.text.toString().toInt()
-            basket = loadBasketJSON(this)
+            // Recherche si on a pas déjà un plat du même type
+            for (item in basket.data){
+                if (item.dish.id == basketItem.dish.id){
+                    // On a trouvé un plat identique
+                    var qtyOld = item.quantity.toInt()
+                    basketItem.quantity+=qtyOld
+                    basket.data.remove(item)
+                }
+            }
             basket.data.add(basketItem)
             saveBasketJSON(view, basket, this)
-            basketInfo(saveUserPrefs (this, bindingDishAct.etnQuantity.text.toString().toInt()))
+            basketItemQty = basket.getCountItemsInBasket()
+            savePrefsQty(this, basketItemQty)
+            invalidateOptionsMenu()
         }
-        bindingDishAct.imgCart.setOnClickListener {
-            // Ouvrir la page du panier
-            val changePage = Intent(this, BasketActivity::class.java)
-            var basketJSON = loadBasketJSON(this)
-            changePage.putExtra(BASKET, basketJSON)
-            startActivity(changePage)
-        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initDishActivity(dish)
+        invalidateOptionsMenu()
     }
     private fun initDishActivity(dish: DishModel){
         bindingDishAct.etnQuantity.setText("1")
@@ -68,14 +72,15 @@ class DishActivity : AppCompatActivity() {
         bindingDishAct.txtIngredients.text = dish.ingredients.joinToString (", "){ it.name_fr }
         // Création d'une liste avec les images
         for (image in dish.images) {
-            listImages.add(image)
+            if (image == "") {
+                listImages.add("http://No_URL")
+            }else{
+                listImages.add(image)
+            }
         }
-        if (listImages.isEmpty()){
-            listImages.add("")
-        }
-        // TODO A modifier pour utiliser le nouveau caroussel
-        bindingDishAct.viewPager.adapter = DishDetailAdapter(supportFragmentManager, listImages)
-        //bindingDishAct.viewPager.adapter = DishPictureAdapter(activity as DishActivity(), listImages)
+        bindingDishAct.dishPicturesPager.adapter = DishDetailAdapter(this, listImages)
+        basket = loadBasketJSON(this)
+        basketItemQty = basket.getCountItemsInBasket()
     }
 
     private fun addQuantity (){
@@ -98,21 +103,5 @@ class DishActivity : AppCompatActivity() {
         var newPrice: Float
         newPrice = quantity * basePrice
         bindingDishAct.txtPrice.setText(newPrice.toString())
-    }
-    private fun basketInfo (basketItems: Int){
-        // Récupération des infos sur le nombre d'articles dans le panier
-        if (basketItems > 0){
-            bindingDishAct.btnInfoBasket.visibility = View.VISIBLE
-            bindingDishAct.btnInfoBasket.text = basketItems.toString()
-            if (basketItems > 10){
-                bindingDishAct.btnInfoBasket.textSize = "7".toFloat()
-            }else {
-                bindingDishAct.btnInfoBasket.textSize = "12".toFloat()
-            }
-        }else{
-            bindingDishAct.btnInfoBasket.visibility = View.GONE
-            bindingDishAct.btnInfoBasket.text = "0"
-            bindingDishAct.btnInfoBasket.textSize = "12".toFloat()
-        }
     }
 }

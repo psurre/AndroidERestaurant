@@ -1,5 +1,6 @@
 package fr.isen.surre.androiderestaurant
 
+import android.accounts.Account
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,7 +17,6 @@ import org.json.JSONObject
 
 class RegisterFragment : Fragment() {
     private lateinit var bindingRegisterFragment: FragmentRegisterBinding
-    private var idRegClient: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +35,9 @@ class RegisterFragment : Fragment() {
                 // Enregistrement via webservices
                 requestRegister(view)
             }
+        }
+        bindingRegisterFragment.imgCloseRegister.setOnClickListener {
+            (activity as AccountActivity).onBackPressed()
         }
     }
 
@@ -89,7 +92,7 @@ class RegisterFragment : Fragment() {
                 idReg = Gson().fromJson(response.toString(), DataRegister::class.java)
                 if (idReg.code.toString() == "200"){
                     showSnackbar(view, "Compte créé avec l'id : "+idReg.data.id+" !")
-                    (activity as AccountActivity).savePrefsIdUser(idReg.data.id)
+                    context?.let { savePrefsIdUser(it, idReg.data.id) }
                     // Redirection
                     (activity as AccountActivity).gotoLogin()
                 }else if (idReg.code.toString() == "111"){

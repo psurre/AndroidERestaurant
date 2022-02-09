@@ -13,12 +13,13 @@ import fr.isen.surre.androiderestaurant.model.DataModel
 import org.json.JSONObject
 import android.view.View
 import fr.isen.surre.androiderestaurant.model.DishModel
+import java.security.cert.PKIXRevocationChecker
 
 
 // Constantes
 const val KEYDISHES = "key.dishes"
 
-class CategoryActivity : AppCompatActivity() {
+class CategoryActivity : OptionsMenuActivity() {
     // Definition des variables
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var bindingDetAct : ActivityDetailsBinding
@@ -43,6 +44,11 @@ class CategoryActivity : AppCompatActivity() {
         // Affichage des menus
         getDataMenu (txtCategory.toString())
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        invalidateOptionsMenu()
     }
 
     private fun onListItemClick(dish: DishModel) {

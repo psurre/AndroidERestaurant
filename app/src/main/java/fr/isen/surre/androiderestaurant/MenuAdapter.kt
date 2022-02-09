@@ -1,9 +1,10 @@
 package fr.isen.surre.androiderestaurant
 
-import android.graphics.ColorSpace
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -16,7 +17,7 @@ class MenuAdapter (private val menuReadings: ArrayList<String>, private val onIt
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //set element from menu data [using position] to TextView
-        holder.menuTextView.text = menuReadings[position]
+        holder.menuTxtBasketInfo.text = menuReadings[position]
         holder.itemView.setOnClickListener{
             onItemClicked(menuReadings[position])
         }
@@ -26,9 +27,11 @@ class MenuAdapter (private val menuReadings: ArrayList<String>, private val onIt
     }
     //Implementation of the ViewHolder Class
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val menuTextView: TextView
+        val menuTxtBasketInfo: TextView
+        val imgMenuCart: ImageView
         init {
-            menuTextView = view.findViewById(R.id.txtMenuItem)
+            menuTxtBasketInfo = view.findViewById(R.id.txtMenuBasket)
+            imgMenuCart = view.findViewById(R.id.imgMenuCart)
         }
     }
 }

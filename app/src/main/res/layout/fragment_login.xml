@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".LoginFragment">
 
+    <ImageView
+        android:id="@+id/imgCloseLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_close_24"
+        app:layout_constraintBottom_toTopOf="@+id/txtLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtLogin"
         android:layout_width="0dp"
