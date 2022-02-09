@@ -6,15 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imgBackMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.7"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/android_tavern_r" />
+
     <TextView
         android:id="@+id/TxtRestaurant"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="casual"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/dsgabriele"
+        android:shadowColor="#393131"
+        android:shadowDx="2"
+        android:shadowDy="5"
+        android:shadowRadius="5"
         android:text="@string/project_welcome"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="34sp"
+        android:textSize="68sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -22,82 +40,56 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
-    <View
-        android:id="@+id/divider1"
-        android:layout_width="350dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="130dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ImgRestaurant" />
-
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="350dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="116dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="350dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="124dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
-
-    <ImageView
-        android:id="@+id/ImgRestaurant"
-        android:layout_width="129dp"
-        android:layout_height="129dp"
-        android:layout_marginTop="36dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TxtRestaurant"
-        app:srcCompat="@drawable/android_cooking" />
-
     <TextView
         android:id="@+id/txtStarter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="casual"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/dsgabriele"
+        android:shadowColor="#393131"
+        android:shadowDx="2"
+        android:shadowDy="5"
+        android:shadowRadius="5"
         android:text="@string/project_starter"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/black"
+        android:textSize="55sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ImgRestaurant" />
+        app:layout_constraintTop_toBottomOf="@+id/TxtRestaurant" />
 
     <TextView
         android:id="@+id/txtMainCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="casual"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        android:fontFamily="@font/dsgabriele"
+        android:shadowColor="#393131"
+        android:shadowDx="2"
+        android:shadowDy="5"
+        android:shadowRadius="5"
         android:text="@string/project_mainCourse"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
+        android:textColor="@color/black"
+        android:textSize="55sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+        app:layout_constraintTop_toBottomOf="@+id/txtStarter" />
 
     <TextView
         android:id="@+id/txtDessert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="casual"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/dsgabriele"
+        android:shadowColor="#393131"
+        android:shadowDx="2"
+        android:shadowDy="5"
+        android:shadowRadius="5"
         android:text="@string/project_dessert"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider3"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/black"
+        android:textSize="55sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/txtMainCourse" />
 
     <TextView
         android:id="@+id/txtInfo"

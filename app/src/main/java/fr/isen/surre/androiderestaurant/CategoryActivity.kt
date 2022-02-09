@@ -67,8 +67,6 @@ class CategoryActivity : OptionsMenuActivity() {
                 for (dish in category.items) {
                     dishesReturn.add(dish)
                 }
-            }else{
-                //TODO Faire le cas ou on ne trouve pas la catégorie
             }
         }
         val adapterCardHolder = CategoryAdapter (dishesReturn, { position -> onListItemClick(position) })
@@ -101,5 +99,11 @@ class CategoryActivity : OptionsMenuActivity() {
         )
         VolleySingleton.getInstance(applicationContext)
             .addToRequestQueue(stringRequest)
+    }
+    override fun onDestroy() {
+        // Fonction d'ajout de logs dans le onDestroy
+        super.onDestroy()
+        invalidateOptionsMenu()
+        Log.i("CategoryActivity", "*****************  MainActivity -> Destroyed  *******************")
     }
 }

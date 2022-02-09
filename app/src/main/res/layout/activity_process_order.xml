@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/android_cooking" />
+        app:srcCompat="@drawable/android_default" />
 
     <TextView
         android:id="@+id/txtOrderStatus"
@@ -24,7 +24,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:fontFamily="casual"
+        android:shadowColor="#393131"
+        android:shadowDx="2"
+        android:shadowDy="5"
+        android:shadowRadius="5"
+        android:textColor="@color/black"
         android:text="@string/project_orderTreatment"
         android:textAlignment="center"
         android:textSize="22sp"
@@ -42,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtOrderStatus"
-        app:srcCompat="@drawable/android_cooking" />
+        app:srcCompat="@drawable/android_default" />
 
     <ProgressBar
         android:id="@+id/pgbOrder"

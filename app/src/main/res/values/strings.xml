@@ -38,7 +38,7 @@
     <string name="project_orderTreatment">Commande en cours de traitement ...</string>
     <string name="project_orderFinish">Commande traitée !</string>
     <string name="project_about">A propos de cette application</string>
-    <string name="project_author">Développeur : Patrick Surre</string>
+    <string name="project_author">Patrick Surre</string>
     <string name="project_idea">Idée originale : Marc Mollinari</string>
-    <string name="project_design">Design : Patrick Surre</string>
+    <string name="project_design">Dev et Design : </string>
 </resources>

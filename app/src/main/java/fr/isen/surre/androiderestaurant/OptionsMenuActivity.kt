@@ -14,6 +14,8 @@ open class OptionsMenuActivity: AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_main,menu)
+
+        // Gestion de la pastille
         val menuBasket: MenuItem? = menu?.findItem(R.id.itemBasket)
         val menuActionView: View? = menuBasket?.actionView
         val itemInBasket = menuActionView?.findViewById<TextView>(R.id.txtMenuBasket)
@@ -29,6 +31,17 @@ open class OptionsMenuActivity: AppCompatActivity() {
                 onOptionsItemSelected(menuBasket as MenuItem)
             }
         }
+
+        // Gestion du cadenas pour le login - logout
+        if (getUserId(this) != ""){
+            if (menu != null) {
+                menu.findItem(R.id.itemLogin).setIcon(R.drawable.ic_lock_24)
+            }
+        }else{
+            if (menu != null) {
+                menu.findItem(R.id.itemLogin).setIcon(R.drawable.ic_lock_open_24)
+            }
+        }
         return true
     }
 
@@ -39,8 +52,12 @@ open class OptionsMenuActivity: AppCompatActivity() {
             R.id.itemLogin ->
             {
                 if (checkConn(this)){
-                    val message: String = "Vous êtes déjà connecté."
-                    showToast(message, this)
+                    val user = getUserId(this)
+                    if (removeUserId(this)){
+                        val message: String = "Déconnexion réalisée avec succès !"
+                        showToast(message, this)
+                        invalidateOptionsMenu()
+                    }
                 }else{
                     val changePage = Intent(this, AccountActivity::class.java)
                     startActivity(changePage)

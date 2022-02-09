@@ -127,7 +127,7 @@
             android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/dishImage"
-            app:srcCompat="@drawable/trash" />
+            app:srcCompat="@drawable/ic_delete" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

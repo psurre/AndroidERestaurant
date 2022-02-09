@@ -83,7 +83,12 @@ fun getUserId(context: Context): String{
     userId = UserPrefs.getString("user_id", userId).toString()
     return userId
 }
-
+fun removeUserId(context: Context): Boolean{
+    var returnRemove = true
+    val UserPrefs = context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)
+    UserPrefs.edit().remove("user_id").commit()
+    return returnRemove
+}
 fun getBasketQty(context: Context): String{
     var basketQty = ""
     val UserPrefs =  context.getSharedPreferences("ERESTOPARAMS", Context.MODE_PRIVATE)

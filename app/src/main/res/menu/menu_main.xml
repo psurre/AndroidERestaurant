@@ -3,7 +3,7 @@
     <item
         android:id="@+id/itemLogin"
         android:title="Login"
-        android:icon="@android:drawable/ic_lock_idle_lock"
+        android:icon="@drawable/ic_lock_open_24"
         app:showAsAction="always"/>
     <item
         android:id="@+id/itemBasket"

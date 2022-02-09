@@ -3,6 +3,7 @@ package fr.isen.surre.androiderestaurant
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.isen.surre.androiderestaurant.databinding.ActivityBasketBinding
@@ -76,5 +77,11 @@ class BasketActivity : OptionsMenuActivity() {
         savePrefsQty(this, basket.getCountItemsInBasket()-basketItem.quantity)
         basket.data.remove(basketItem)
         saveBasketJSON(bindingBasketActivity.root, basketJSON, this)
+    }
+    override fun onDestroy() {
+        // Fonction d'ajout de logs dans le onDestroy
+        super.onDestroy()
+        invalidateOptionsMenu()
+        Log.i("BasketActivity", "*****************  MainActivity -> Destroyed  *******************")
     }
 }

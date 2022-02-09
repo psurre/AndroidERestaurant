@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".BasketActivity">
 
+    <ImageView
+        android:id="@+id/imgBackBasket"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.7"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/android_tavern_r" />
+
     <Button
         android:id="@+id/btnPay"
         android:layout_width="360dp"

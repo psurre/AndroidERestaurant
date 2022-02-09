@@ -1,6 +1,7 @@
 package fr.isen.surre.androiderestaurant
 
 import android.os.Bundle
+import android.util.Log
 import fr.isen.surre.androiderestaurant.databinding.ActivityDishBinding
 import fr.isen.surre.androiderestaurant.model.DishModel
 import fr.isen.surre.androiderestaurant.model.DataBasket
@@ -103,5 +104,11 @@ class DishActivity : OptionsMenuActivity() {
         var newPrice: Float
         newPrice = quantity * basePrice
         bindingDishAct.txtPrice.setText(newPrice.toString())
+    }
+    override fun onDestroy() {
+        // Fonction d'ajout de logs dans le onDestroy
+        super.onDestroy()
+        invalidateOptionsMenu()
+        Log.i("DishActivity", "*****************  MainActivity -> Destroyed  *******************")
     }
 }

@@ -11,7 +11,7 @@
         android:layout_width="@dimen/menu_item_icon_size"
         android:layout_height="@dimen/menu_item_icon_size"
         android:layout_gravity="center"
-        android:src="@drawable/basket"/>
+        android:src="@drawable/ic_cart"/>
 
     <FrameLayout
         android:id="@+id/view_alert_red_circle"

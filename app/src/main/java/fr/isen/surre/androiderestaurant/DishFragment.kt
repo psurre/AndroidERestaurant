@@ -28,9 +28,9 @@ class DishFragment: Fragment() {
         arguments?.getString("picture_url")?.let{ pictureURL ->
             Picasso.get()
                 .load(pictureURL)
-                .placeholder(R.drawable.android_cooking)
+                .placeholder(R.drawable.android_default)
                 .into(bindingDishFragment.imgDishFrag)
-        } ?: R.drawable.android_cooking.toString()
+        } ?: R.drawable.android_default.toString()
     }
 
     companion object{
