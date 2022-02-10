@@ -13,6 +13,6 @@
     <item
         android:id="@+id/itemAbout"
         android:title="Basket"
-        android:icon="@drawable/ic_baseline_question"
+        android:icon="@drawable/ic_question"
         app:showAsAction="always"/>
 </menu>

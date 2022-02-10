@@ -2,6 +2,7 @@ package fr.isen.surre.androiderestaurant
 
 import android.accounts.Account
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,16 @@ import android.view.ViewGroup
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import fr.isen.surre.androiderestaurant.databinding.FragmentRegisterBinding
 import fr.isen.surre.androiderestaurant.model.DataRegister
 import org.json.JSONObject
 
+const val MINSIZE = 4
+const val MINMDPSIZE = 8
+const val TRUERETURN = "NOERROR"
 
 class RegisterFragment : Fragment() {
     private lateinit var bindingRegisterFragment: FragmentRegisterBinding
@@ -30,6 +36,7 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Interactions avec la vue
         super.onViewCreated(view, savedInstanceState)
+        initReg()
         bindingRegisterFragment.btnRegister.setOnClickListener {
             if (formValidation(view)) {
                 // Enregistrement via webservices
@@ -41,39 +48,72 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun formValidation(view: View): Boolean {
-        // Fonction de validation du formulaire
-        // Variables
-        var resultFormVal: Boolean = true
-        // Vérification que les champs soient remplis
-        if (bindingRegisterFragment.edtRegName.text.isNullOrEmpty()){
-            showSnackbar(view,"Champ Nom vide ! Veuillez le compléter.")
-            resultFormVal = false
-        }
-        if (bindingRegisterFragment.edtRegSurname.text.isNullOrEmpty()) {
-            showSnackbar(view,"Champ Prénom vide ! Veuillez le compléter.")
-            resultFormVal = false
-        }
-        if (bindingRegisterFragment.edtRegEmail.text.isNullOrEmpty()){
-            showSnackbar(view,"Champ Email vide ! Veuillez le compléter.")
-            resultFormVal = false
-        }
-        if (bindingRegisterFragment.edtRegAdress.text.isNullOrEmpty()){
-            showSnackbar(view,"Champ Adresse vide ! Veuillez le compléter.")
-            resultFormVal = false
-        }
-        if (bindingRegisterFragment.edtRegPass.text.isNullOrEmpty()){
-            showSnackbar(view,"Champ Mot de passe vide ! Veuillez le compléter.")
-            resultFormVal = false
-        }
-        return resultFormVal
+    override fun onResume() {
+        initReg()
+        super.onResume()
     }
 
-    private fun showSnackbar(view: View, message: String){
-        val snackbar = Snackbar
-            .make(view, message, Snackbar.LENGTH_LONG)
-        // Show
-        snackbar.show()
+    private fun initReg (){
+        bindingRegisterFragment.edtRegName.setText("")
+        bindingRegisterFragment.edtRegSurname.setText("")
+        bindingRegisterFragment.edtRegEmail.setText("")
+        bindingRegisterFragment.edtRegAdress.setText("")
+        bindingRegisterFragment.edtRegPass.setText("")
+    }
+    private fun formValidation(view: View): Boolean {
+        // Fonction de validation du formulaire
+        // Champ Nom
+        var message = formFieldsValidation(bindingRegisterFragment.edtRegName, bindingRegisterFragment.otxtRegName)
+        if (message != TRUERETURN){
+            showSnackbar(message,view)
+            return false
+        }
+        // Champ Prénom
+        message = formFieldsValidation(bindingRegisterFragment.edtRegSurname, bindingRegisterFragment.otxtRegSurname)
+        if (message != TRUERETURN){
+            showSnackbar(message,view)
+            return false
+        }
+        // Champ Email
+        message = formFieldsValidation(bindingRegisterFragment.edtRegEmail, bindingRegisterFragment.otxtRegEmail)
+        if (message != TRUERETURN){
+            showSnackbar(message,view)
+            return false
+        }
+        // Champ Address
+        message = formFieldsValidation(bindingRegisterFragment.edtRegAdress, bindingRegisterFragment.otxtRegAdress)
+        if (message != TRUERETURN){
+            showSnackbar(message,view)
+            return false
+        }
+        // Champ password
+        message = formFieldsValidation(bindingRegisterFragment.edtRegPass, bindingRegisterFragment.otxtRegPass)
+        if (message != TRUERETURN){
+            showSnackbar(message,view)
+            return false
+        }
+        return true
+    }
+
+    private fun formFieldsValidation (txtEditText: TextInputEditText, txtInputLayout: TextInputLayout): String{
+        // Champ vide
+        if (txtEditText.text?.isEmpty() == true){
+            return "Champ "+ txtInputLayout.hint + " vide ! Veuillez le compléter."
+            // Taille du texte saisi <= MINSIZE
+        }else if(txtEditText.text?.length!! <= MINSIZE){
+                return "Champ "+ txtInputLayout.hint + " trop court (<= "+MINSIZE.toString()+")."
+            }else if (txtInputLayout.hint == getString(R.string.project_email)){
+                        // Formatage de l'email
+                        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(txtEditText.text.toString()).matches()){
+                            return "Champ "+ txtInputLayout.hint + " invalide."
+                        }
+                }else if (txtInputLayout.hint == getString(R.string.project_mdp)){
+                            // Taille spécifique pour le mot de passe
+                            if (txtEditText.text?.length!! <= MINMDPSIZE){
+                                return "Champ "+ txtInputLayout.hint + " trop court (<= "+ MINMDPSIZE.toString()+")."
+                            }
+                }
+        return TRUERETURN
     }
 
     private fun requestRegister (view: View){
@@ -90,21 +130,28 @@ class RegisterFragment : Fragment() {
             Request.Method.POST, urlRegister, jsonReqObject,
             { response ->
                 idReg = Gson().fromJson(response.toString(), DataRegister::class.java)
-                if (idReg.code.toString() == "200"){
-                    showSnackbar(view, "Compte créé avec l'id : "+idReg.data.id+" !")
+                if (idReg.code == "200"){
+                    showSnackbar("Compte créé avec l'id : "+idReg.data.id+" !", view)
                     context?.let { savePrefsIdUser(it, idReg.data.id) }
+                    Thread.sleep(1000L)
                     // Redirection
-                    (activity as AccountActivity).gotoLogin()
+                    (activity as AccountActivity).onBackPressed()
                 }else if (idReg.code.toString() == "111"){
-                    showSnackbar(view, "Erreur : le compte existe déjà")
+                    showSnackbar("Erreur : le compte existe déjà", view)
                 }else if (idReg.code.toString() == "113"){
-                    showSnackbar(view, "Erreur : le mot de passe est trop court !")
+                    showSnackbar("Erreur : le mot de passe est trop court !", view)
                 }else if (idReg.code.toString() == "112") {
-                    showSnackbar(view, "Erreur : l'email est invalide !")
+                    showSnackbar("Erreur : l'email est invalide !", view)
                 }
             },{ error ->
                 // Gérer l'erreur
-                showSnackbar(view, "Serveur indisponible : réessayez plus tard")
+                showSnackbar("Serveur indisponible : réessayez plus tard", view)
+                Log.i("********** VolleyError", "Erreur -> " + error)
+                val errorDetails = onVolleyErrorResponse(error)
+                if (errorDetails.isNotEmpty()) {
+                    Log.i("********** VolleyError", "Status Code -> " + errorDetails[0])
+                    if (errorDetails.size == 2) { Log.i("********** VolleyError", "Data -> " + errorDetails[1])}
+                }
             }
         )
         VolleySingleton.getInstance((activity as AccountActivity).applicationContext)

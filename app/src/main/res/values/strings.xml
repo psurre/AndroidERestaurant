@@ -33,7 +33,7 @@
     <string name="project_email">Email</string>
     <string name="project_regpass">Mot de passe</string>
     <string name="project_register">S\'enregistrer</string>
-    <string name="project_txtregister">Créez votre compte</string>
+    <string name="project_txtregister">Pas de compte ? Créez en un !</string>
     <string name="project_home">Retourner à l\'accueil</string>
     <string name="project_orderTreatment">Commande en cours de traitement ...</string>
     <string name="project_orderFinish">Commande traitée !</string>

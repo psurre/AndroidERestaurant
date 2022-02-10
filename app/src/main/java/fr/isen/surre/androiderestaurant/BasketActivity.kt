@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.isen.surre.androiderestaurant.databinding.ActivityBasketBinding
@@ -37,6 +38,7 @@ class BasketActivity : OptionsMenuActivity() {
 
         bindingBasketActivity.btnPay.setOnClickListener {
             if (checkConn(this)){
+                bindingBasketActivity.pgbPay.visibility = View.VISIBLE
                 // L'utilisateur est connecté -> on peut passer la commande
                 val changePage = Intent (this, ProcessOrderActivity::class.java)
                 changePage.putExtra(BASKETKEY, basket)
@@ -46,6 +48,12 @@ class BasketActivity : OptionsMenuActivity() {
                 startActivity(changePage)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Rechargement du panier
+        basketInit()
     }
 
     private fun onListItemClick(basketItem: DataBasketItem) {
@@ -59,6 +67,7 @@ class BasketActivity : OptionsMenuActivity() {
         showSnackbar(message, bindingBasketActivity.root)
     }
 
+
     private fun basketInit(){
         // Initialisation du recyclerView
         val recyclerView: RecyclerView = bindingBasketActivity.rcvBasket
@@ -69,6 +78,7 @@ class BasketActivity : OptionsMenuActivity() {
         if (getBasketQty(this).toInt() == 0){
             startActivity(Intent(this, MainActivity::class.java))
         }
+        bindingBasketActivity.pgbPay.visibility = View.GONE
     }
 
     private fun deleteDishInBasket (basketItem: DataBasketItem){

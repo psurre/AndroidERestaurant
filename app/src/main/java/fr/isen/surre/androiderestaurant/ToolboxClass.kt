@@ -7,6 +7,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import fr.isen.surre.androiderestaurant.model.DataBasket
 import java.io.File
+import com.android.volley.VolleyError
+import java.io.UnsupportedEncodingException
+
 
 fun saveBasketJSON(view: View, basket: DataBasket, context: Context){
     val gsonPretty = GsonBuilder().setPrettyPrinting().create()
@@ -112,4 +115,19 @@ fun initBasket(context: Context){
         }
     }
     savePrefsQty(context, itemInBasket)
+}
+
+fun onVolleyErrorResponse(error: VolleyError?): List<String> {
+    if (error?.networkResponse == null) {
+        return emptyList()
+    }
+    var returnList = arrayListOf<String>()
+    returnList.add(error.networkResponse.statusCode.toString())
+    //get response body and parse with appropriate encoding
+    try {
+        returnList.add(error.networkResponse.data.toString())
+    } catch (e: UnsupportedEncodingException) {
+        // exception
+    }
+    return returnList
 }

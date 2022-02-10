@@ -87,7 +87,7 @@ class CategoryActivity : OptionsMenuActivity() {
                 // Affichage de la ProgressBar
                 bindingDetAct.progressLoader.visibility = View.VISIBLE
                 // On met en pause 1s juste pour voir le loader tourner :)
-                Thread.sleep(1000L)
+                Thread.sleep(500L)
                 // Le résultat est parsé et envoyé dans la classe de DataModel
                 dishModel = Gson().fromJson(response.toString(), DataModel::class.java)
                 showDishes(txtCetegory, dishModel)
