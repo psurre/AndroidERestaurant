@@ -2,26 +2,31 @@ package fr.isen.surre.androiderestaurant
 import android.os.Bundle
 import android.content.Intent
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import fr.isen.surre.androiderestaurant.databinding.ActivityMainBinding
-import fr.isen.surre.androiderestaurant.model.DataBasket
 
-
-// Constantes
-const val KEYDETAILTXT = "key.detail.txt"
+/**
+ * Classe principale de l'application.
+ *
+ * Hérite de OptionsMenuActivity pour afficher le menu dans l'activité.
+ * @constructor Non implémenté.
+ * @author Patrick Surre
+ */
 
 class MainActivity : OptionsMenuActivity() {
     private lateinit var bindingMainAct : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Ajout d'un log
         Log.i("MainActivity", "*****************  MainActivity -> created  *********************")
         // Binding
         bindingMainAct = ActivityMainBinding.inflate(layoutInflater)
         val view = bindingMainAct.root
         setContentView(view)
+        /**
+         * Appel de la fonction [initMainActivity]
+         */
         initMainActivity()
-        // Actions sur les types de plats
+        // Actions Clic sur les types de plats
         bindingMainAct.txtStarter.setOnClickListener {
             dishesDetails(bindingMainAct.txtStarter.text.toString())
         }
@@ -36,20 +41,34 @@ class MainActivity : OptionsMenuActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Mise à jour du menu
         invalidateOptionsMenu()
     }
 
     private fun initMainActivity(){
+        /**
+         * Fonction qui permet d'initialiser la page
+         *
+         * Appel de la fonction [initBasket]
+         */
         initBasket(this)
     }
     override fun onDestroy() {
-        // Fonction d'ajout de logs dans le onDestroy
+        /**
+         * Surcharge du onDestroy pour ajouter un log dans le onDestroy.
+         */
         super.onDestroy()
         Log.i("MainActivity", "*****************  MainActivity -> Destroyed  *******************")
     }
 
     private fun dishesDetails( dishType : String) {
-        // Fonction qui transmet le type de plats à la fenêtre de détails
+        /**
+         * Fonction qui permet de changer de page vers la page des plats de la catégorie choisie.
+         *
+         * @param dishType Catégorie des plats.
+         *
+         * Vers l'activité [CategoryActivity]
+         */
         val changePage = Intent(this, CategoryActivity::class.java)
         changePage.putExtra(KEYDETAILTXT, dishType)
         startActivity(changePage)

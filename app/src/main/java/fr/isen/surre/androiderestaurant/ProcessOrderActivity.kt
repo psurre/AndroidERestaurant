@@ -12,8 +12,20 @@ import fr.isen.surre.androiderestaurant.model.DataBasket
 import fr.isen.surre.androiderestaurant.model.DataOrderResponse
 import org.json.JSONObject
 
+/**
+ * Classe utilisée pour gérer l'envoi de la commande
+ * Cette activité affiche le statut d'envoi de la commande
+ * Fonctionnalités offertes à l'utilisateur :
+ *  - Voir si la commande a bien été transmise
+ *
+ * @constructor Non implémenté.
+ * @author Patrick Surre
+ *
+ */
+
 class ProcessOrderActivity : AppCompatActivity() {
 
+    // Binding
     private lateinit var bindingProcessOrderActivity: ActivityProcessOrderBinding
     private var basket:DataBasket = DataBasket()
 
@@ -22,8 +34,15 @@ class ProcessOrderActivity : AppCompatActivity() {
         bindingProcessOrderActivity = ActivityProcessOrderBinding.inflate(layoutInflater)
         val view = bindingProcessOrderActivity.root
         setContentView(view)
-        initProcessOrderActivity(view)
+        // Fonction d'initialisation de l'activité
+        /**
+         * Appel de la fonction [initProcessOrderActivity]
+         */
+        initProcessOrderActivity()
         bindingProcessOrderActivity.btnBackHome.setOnClickListener {
+            /**
+             * Vers [MainActivity]
+             */
             val changePage = Intent(this, MainActivity::class.java)
             startActivity(changePage)
         }
@@ -35,11 +54,17 @@ class ProcessOrderActivity : AppCompatActivity() {
             // Changer l'image, le texte et afficher le bouton
             bindingProcessOrderActivity.txtOrderStatus.text=getText(R.string.project_orderFinish)
             bindingProcessOrderActivity.btnBackHome.visibility=View.VISIBLE
+            /**
+             * Appel de la fonction [deleteBasket]
+             */
             deleteBasket()
         }
     }
 
-    private fun initProcessOrderActivity(view: View){
+    private fun initProcessOrderActivity(){
+        /**
+         * Fonction permettant d'initialiser la page
+         */
         // Visibilité des éléments
         bindingProcessOrderActivity.pgbOrder.visibility=View.INVISIBLE
         bindingProcessOrderActivity.btnBackHome.visibility=View.INVISIBLE
@@ -50,13 +75,19 @@ class ProcessOrderActivity : AppCompatActivity() {
     }
 
     private fun processOrder (): Boolean{
+        /**
+         * Fonction de transmission de la commande.
+         *
+         * @return Retourne vrai si la commande a bien été passée.
+         */
         var resultProcessOrder: Boolean = true
+
         // Afficher la progressBar
         bindingProcessOrderActivity.pgbOrder.visibility=View.VISIBLE
         //Envoie vers le webservice
         // Paramètres attendus : id_shop, id_user et msg
         val userId = getUserId(this)
-        val urlOrder: String = "http://test.api.catering.bluecodegames.com/user/order"
+        val urlOrder: String = URLORDER
         val jsonOrder: String = Gson().toJson(basket)
         var responseOrder: DataOrderResponse = DataOrderResponse()
         var jsonReqObject = JSONObject()
@@ -79,14 +110,21 @@ class ProcessOrderActivity : AppCompatActivity() {
         )
         VolleySingleton.getInstance((this).applicationContext)
             .addToRequestQueue(stringRequest)
-        Thread.sleep(1000L)
+        // Pause pour afficher un peu la progressBar si ça va trop vite
+        Thread.sleep(500L)
         // Cacher la progressBar
         bindingProcessOrderActivity.pgbOrder.visibility=View.GONE
         return resultProcessOrder
     }
 
     private fun deleteBasket (){
+        /**
+         * Fonction de suppression du panier
+         */
         basket = DataBasket()
+        /**
+         * Appel à la fonction [deleteBasketPersistent]
+         */
         deleteBasketPersistent(this)
     }
 }

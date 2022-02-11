@@ -1,6 +1,5 @@
 package fr.isen.surre.androiderestaurant
 
-import android.accounts.Account
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -17,11 +15,14 @@ import fr.isen.surre.androiderestaurant.databinding.FragmentRegisterBinding
 import fr.isen.surre.androiderestaurant.model.DataRegister
 import org.json.JSONObject
 
-const val MINSIZE = 4
-const val MINMDPSIZE = 8
-const val TRUERETURN = "NOERROR"
+/**
+ * Fragment de gestion de l'enregistrement d'un utilisateur pour l'activité AccountActivity
+ *
+ * @author Patrick Surre
+ */
 
 class RegisterFragment : Fragment() {
+    // Binding
     private lateinit var bindingRegisterFragment: FragmentRegisterBinding
 
     override fun onCreateView(
@@ -36,24 +37,40 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Interactions avec la vue
         super.onViewCreated(view, savedInstanceState)
+        /**
+         * Appel de la fonction [initReg]
+         */
         initReg()
         bindingRegisterFragment.btnRegister.setOnClickListener {
+            /**
+             * Appel de la fonction [formValidation]
+             */
             if (formValidation(view)) {
+                /**
+                 * Appel de la fonction [requestRegister]
+                 */
                 // Enregistrement via webservices
                 requestRegister(view)
             }
         }
+        // Clic sur l'icone en forme de croix
         bindingRegisterFragment.imgCloseRegister.setOnClickListener {
             (activity as AccountActivity).onBackPressed()
         }
     }
 
     override fun onResume() {
+        /**
+         * Appel de la fonction [initReg]
+         */
         initReg()
         super.onResume()
     }
 
     private fun initReg (){
+        /**
+         * Fonction d'initialisation des champs du formulaire
+         */
         bindingRegisterFragment.edtRegName.setText("")
         bindingRegisterFragment.edtRegSurname.setText("")
         bindingRegisterFragment.edtRegEmail.setText("")
@@ -61,6 +78,12 @@ class RegisterFragment : Fragment() {
         bindingRegisterFragment.edtRegPass.setText("")
     }
     private fun formValidation(view: View): Boolean {
+        /**
+         * Fonction de validation des champs du formulaire.
+         *
+         * @param view Accès à la vue pour affichage des snackbar
+         * @return Retourne vrai si tous les champs du formulaire sont valides
+         */
         // Fonction de validation du formulaire
         // Champ Nom
         var message = formFieldsValidation(bindingRegisterFragment.edtRegName, bindingRegisterFragment.otxtRegName)
@@ -96,6 +119,15 @@ class RegisterFragment : Fragment() {
     }
 
     private fun formFieldsValidation (txtEditText: TextInputEditText, txtInputLayout: TextInputLayout): String{
+        /**
+         * Fonction de validation d'un champ.
+         * Vérification de la taille et du contenu.
+         * Vérification complémentaire du formatage pour le champ Email.
+         *
+         * @param txtEditText Champ du formulaire à tester
+         * @param txtInputLayout Récupération du label du champ.
+         * @return Retourne un message d'erreur ou la valeur de la constante TRUERETURN
+         */
         // Champ vide
         if (txtEditText.text?.isEmpty() == true){
             return "Champ "+ txtInputLayout.hint + " vide ! Veuillez le compléter."
@@ -117,8 +149,13 @@ class RegisterFragment : Fragment() {
     }
 
     private fun requestRegister (view: View){
+        /**
+         * Fonction de soumission d'une demande d'enregistrement d'un nouvel utilisateur.
+         *
+         * @param view Accès à la vue pour affichage des snackbar.
+         */
         var idReg: DataRegister = DataRegister()
-        val urlRegister: String = "http://test.api.catering.bluecodegames.com/user/register"
+        val urlRegister: String = URLREGISTER
         var jsonReqObject = JSONObject()
         jsonReqObject.put("id_shop", "1")
         jsonReqObject.put("firstname", bindingRegisterFragment.edtRegSurname.text.toString())
@@ -130,10 +167,17 @@ class RegisterFragment : Fragment() {
             Request.Method.POST, urlRegister, jsonReqObject,
             { response ->
                 idReg = Gson().fromJson(response.toString(), DataRegister::class.java)
+                // Test de tous les codes possibles renvoyés par le webservice
                 if (idReg.code == "200"){
                     showSnackbar("Compte créé avec l'id : "+idReg.data.id+" !", view)
+                    /**
+                     * Appel de la fonction [savePrefsIdUser]
+                     */
                     context?.let { savePrefsIdUser(it, idReg.data.id) }
                     Thread.sleep(1000L)
+                    /**
+                     * Vers [AccountActivity]
+                     */
                     // Redirection
                     (activity as AccountActivity).onBackPressed()
                 }else if (idReg.code.toString() == "111"){

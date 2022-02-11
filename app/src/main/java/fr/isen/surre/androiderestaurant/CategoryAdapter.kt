@@ -10,15 +10,42 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import fr.isen.surre.androiderestaurant.model.DishModel
 
+/**
+ * Classe de type Adapter pour la gestion du recyclerView de l'activité d'affichage des plats d'une catégorie
+ *
+ * @param dishes List de plats.
+ * @param onItemClicked Plat sur lequel l'utilisateur a cliqué.
+ * @return Renvoie un RecyclerViewAdapter<CategoryAdapter.ViewHolder>().
+ *
+ * @author Patrick Surre
+ */
+
 class CategoryAdapter (private val dishes: ArrayList<DishModel>, private val onItemClicked: (DishModel) -> Unit) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        /**
+         * Surcharge de la fonction onCreateViewHolder (création de la vue).
+         *
+         * @param parent Récupération du context du parent de la vue.
+         * @param viewType Variable non surchargée.
+         * @return ViewHolder.
+         *
+         */
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_cat_dishes, parent, false)
-        return CategoryAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        /**
+         * Surcharge de la fonction onBindViewHolder pour lier les données à la vue.
+         *
+         * @param holder Manager des éléments de la vue liés aux données.
+         * @param position Position du clic dans le recyclerView.
+         * @return ViewHolder.
+         *
+         */
+        // Picasso pour l'affichage des images
         val picasso = Picasso.get()
         for (dish in dishes){
             if (dish.id == dishes[position].id){
@@ -43,11 +70,24 @@ class CategoryAdapter (private val dishes: ArrayList<DishModel>, private val onI
         }
     }
     override fun getItemCount(): Int {
+        /**
+         * Surcharge de la fonction getItemCount.
+         *
+         * @return Nombre de plats.
+         *
+         */
         return dishes.size
     }
 
     //Implementation of the ViewHolder Class
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+        /**
+         * Classe de gestion de l'affichage de la vue.
+         *
+         * @param view La vue en cours.
+         * @return RecyclerView.ViewHolder(view).
+         *
+         */
         var dishTextView: TextView
         var dishImgView: ImageView
         var dishTextViewPrice: TextView

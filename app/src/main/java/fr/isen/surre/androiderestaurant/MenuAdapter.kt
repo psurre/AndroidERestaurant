@@ -3,10 +3,19 @@ package fr.isen.surre.androiderestaurant
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+
+/**
+ * Classe de type Adapter pour la gestion du menu
+ *
+ * @param menuReadings Panier de l'utilisateur.
+ * @param onItemClicked Plat sur lequel l'utilisateur a cliqué.
+ * @return Renvoie un RecyclerViewAdapter<MenuAdapter.ViewHolder>().
+ *
+ * @author Patrick Surre
+ */
 
 class MenuAdapter (private val menuReadings: ArrayList<String>, private val onItemClicked: (String) -> Unit) : RecyclerView.Adapter<MenuAdapter.ViewHolder>(){
 

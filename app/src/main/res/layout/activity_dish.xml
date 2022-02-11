@@ -114,23 +114,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDishName" />
 
-    <EditText
+    <TextView
         android:id="@+id/etnQuantity"
         android:layout_width="58dp"
         android:layout_height="48dp"
         android:clickable="false"
-        android:cursorVisible="false"
-        android:editable="false"
         android:ems="10"
         android:fontFamily="@font/dsgabriele"
-        android:inputType="numberSigned"
-        android:textAlignment="center"
         android:shadowColor="#393131"
         android:shadowDx="2"
         android:shadowDy="5"
         android:shadowRadius="5"
-        android:textSize="20sp"
+        android:textAlignment="center"
         android:textColor="@color/black"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/dvdTwo"
         app:layout_constraintEnd_toEndOf="parent"
