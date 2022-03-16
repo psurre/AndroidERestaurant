@@ -1,7 +1,8 @@
 package fr.isen.surre.androiderestaurant.model
+import androidx.annotation.Keep
 import java.io.Serializable
 
-data class DataBasket (var data: MutableList<DataBasketItem> = arrayListOf()): Serializable {
+@Keep data class DataBasket (var data: MutableList<DataBasketItem> = arrayListOf()): Serializable {
 
     fun getCountItemsInBasket(): Int{
         var itemsInBasket = 0
@@ -12,4 +13,4 @@ data class DataBasket (var data: MutableList<DataBasketItem> = arrayListOf()): S
     }
 }
 
-data class DataBasketItem (var dish: DishModel = DishModel(), var quantity: Int = 0): Serializable
+@Keep data class DataBasketItem (var dish: DishModel = DishModel(), var quantity: Int = 0): Serializable

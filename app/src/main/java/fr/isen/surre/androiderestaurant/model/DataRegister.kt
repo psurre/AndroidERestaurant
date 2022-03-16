@@ -1,10 +1,12 @@
 package fr.isen.surre.androiderestaurant.model
 
+import androidx.annotation.Keep
 import java.io.Serializable
 
+@Keep
 data class DataRegister (val data: UserData = UserData(), val code: String = ""): Serializable
 
-data class UserData (
+@Keep data class UserData (
     val id: String = "",
     val code: String = "",
     val id_shop: String = "",

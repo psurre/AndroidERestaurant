@@ -1,10 +1,12 @@
 package fr.isen.surre.androiderestaurant.model
 
+import androidx.annotation.Keep
 import java.io.Serializable
 
+@Keep
 data class DataModel(val data: List<DishCategoryModel> = listOf()): Serializable
 
-data class  DishPrices(
+@Keep data class  DishPrices(
     val id: String = "",
     val id_pizza: String = "",
     val id_size: String = "",
@@ -14,7 +16,7 @@ data class  DishPrices(
     val size: String = ""
 ): Serializable
 
-data class  DishIngredients(
+@Keep data class  DishIngredients(
     val id: String = "",
     val id_shop: String = "",
     val name_fr: String = "",
@@ -24,7 +26,7 @@ data class  DishIngredients(
     val id_pizza: String = ""
 ): Serializable
 
-data class DishModel(
+@Keep data class DishModel(
     val id: String = "",
     val name_fr: String = "",
     val name_en: String = "",
@@ -46,7 +48,7 @@ data class DishModel(
     }
 }
 
-data class  DishCategoryModel(
+@Keep data class  DishCategoryModel(
     val name_fr: String = "",
     val name_en: String = "",
     val items: List<DishModel> = listOf()
